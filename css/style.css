@@ -1,0 +1,63 @@
+html, 
+body {
+	height: 100%;
+	font-family: 'Merriweather', serif;
+}
+
+.board{
+	height: 100%;
+	width: 100%;
+	background-color: #fff;	
+	display: block;
+}
+
+
+
+.oneDayWeather {
+
+	width: 200px;
+	height: auto;
+	min-height: 250px;
+	box-shadow: 0 3px 6px rgba(0,0,0,.25);
+	-webkit-box-shadow: 0 3px 6px rgba(0,0,0,.25);
+	-moz-box-shadow: 0 3px 6px rgba(0,0,0,.25);
+	/*border: 1px dotted rgba(0,0,0,.25);*/
+	background-color: #F8F9F9;
+	margin: 10px;
+	float: left;
+	
+}
+
+.oneDayWeather .mainUnit{
+	text-align: center;
+	padding-top: 15px;
+}
+.oneDayWeather .mainUnit:first-child{
+	font-size: 15px;
+	background-color: #D6EAF8
+}
+
+.oneDayWeather .otherUnits{	
+	text-align: center;
+}
+
+.oneDayWeather .otherUnits .unit{
+	width: 100%;
+	border-top: 1px blue dotted;
+	text-align: center;
+	font-size: 12px;
+}
+
+.oneDayWeather .otherUnits .unit span{
+	width: 100%;
+
+}
+
+.oneDayWeather .otherUnits .unit span img{
+	width: 30px;
+	
+}
+
+
+
+
