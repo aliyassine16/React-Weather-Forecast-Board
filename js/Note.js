@@ -32,25 +32,16 @@ var Board=React.createClass({
 
 
 			$.getJSON(url,function(data){
-
-				var map=self.getMeTheMap(data);
-				
-				
+				var map=self.getMeTheMap(data);				
 				map.forEach((value, key, map)=> {
-					console.log(`${key}`);
-    				// console.log(`m[${key}] = ${value[0]}`);
-    				console.log(value[0]);
-    				self.add(value[0]);
-
-    			});
-				// console.log(map);
-				
-
+					self.add(value[0],value);
+				});
 			});
 		}
 
 	},
-	generateWeatherUnit:function(wUnit){
+	generateWeatherUnit:function(wUnit,allDayWeather){
+		console.log(allDayWeather);
 		var weather=wUnit.weather[0];
 		return {
 			id:wUnit.dt,
@@ -60,26 +51,21 @@ var Board=React.createClass({
 			note:weather.description,
 			icon:"http://openweathermap.org/img/w/"+weather.icon+".png",
 			temperature:wUnit.main.temp,
-			midDayUnit:{
-
-			},
-			allDayUnit:{
-
-			}
+			allDayWeather:allDayWeather
 
 		}
 
 	},
-	add:function(wUnit){
+	add:function(wUnit,allDayWeather){
 		var arr=this.state.notes;		
-		arr.push(this.generateWeatherUnit(wUnit));
+		arr.push(this.generateWeatherUnit(wUnit,allDayWeather));
 		this.setState({notes:arr});
 	},
 
 
 	eachNote:function(note,i){
 		return(
-			<Note key={note.id} date={note.date}  icon={note.icon} temperature={note.temperature} index={i}>{note.day}</Note>
+			<Note key={note.id} date={note.date}  icon={note.icon} temperature={note.temperature} index={i} allDayData={note.allDayWeather}>{note.day}</Note>
 			);
 	},
 
@@ -123,7 +109,7 @@ var Note =React.createClass({
 			
 			<div className="oneDayWeather" >
 			<MainSubNote title={this.props.children} date={this.props.date} icon={this.props.icon} temperature={this.props.temperature} />
-			<SubNote />
+			<SubNote allDayData={this.props.allDayData} />
 
 			</div>
 
@@ -159,15 +145,26 @@ var MainSubNote =React.createClass({
 var SubNote =React.createClass({
 
 	render:function(){
-		return(
+		console.log("subnote data",this.props.allDayData);
 
-			<div className="otherUnits">
-			<div className="unit">
-			<span>21:00</span>	
-			<span>18 &#x2103;</span>
-			<span><img alt="" src="http://openweathermap.org/img/w/10d.png" /></span>	
-			</div>	
-			</div>	
+		const mylist= this.props.allDayData.map((item, i)=>{			
+			 
+			 return <div className="otherUnits" key={i}>
+				<div className="unit">
+				<span>{moment.unix(item.dt).format('ddd, hA')} </span>	
+				<span> 18 &#x2103;</span>
+				<span> <img alt="" src={"http://openweathermap.org/img/w/"+item.weather[0].icon+".png"} /> </span>	
+				</div>	
+				</div>
+
+		});
+
+
+
+
+		return (
+				<div>{mylist}</div>
+
 			);
 
 	}

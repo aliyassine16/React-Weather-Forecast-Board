@@ -15656,21 +15656,15 @@ var Board = React.createClass({
 			var url = "http://api.openweathermap.org/data/2.5/forecast?q=" + this.props.city + "&appid=fd21f7a3e4f3101954bee3ee68df7c8e";
 
 			$.getJSON(url, function (data) {
-
 				var map = self.getMeTheMap(data);
-
 				map.forEach(function (value, key, map) {
-					console.log("" + key);
-					// console.log(`m[${key}] = ${value[0]}`);
-					console.log(value[0]);
-					self.add(value[0]);
+					self.add(value[0], value);
 				});
-				// console.log(map);
-
 			});
 		}
 	},
-	generateWeatherUnit: function generateWeatherUnit(wUnit) {
+	generateWeatherUnit: function generateWeatherUnit(wUnit, allDayWeather) {
+		console.log(allDayWeather);
 		var weather = wUnit.weather[0];
 		return {
 			id: wUnit.dt,
@@ -15680,21 +15674,20 @@ var Board = React.createClass({
 			note: weather.description,
 			icon: "http://openweathermap.org/img/w/" + weather.icon + ".png",
 			temperature: wUnit.main.temp,
-			midDayUnit: {},
-			allDayUnit: {}
+			allDayWeather: allDayWeather
 
 		};
 	},
-	add: function add(wUnit) {
+	add: function add(wUnit, allDayWeather) {
 		var arr = this.state.notes;
-		arr.push(this.generateWeatherUnit(wUnit));
+		arr.push(this.generateWeatherUnit(wUnit, allDayWeather));
 		this.setState({ notes: arr });
 	},
 
 	eachNote: function eachNote(note, i) {
 		return React.createElement(
 			Note,
-			{ key: note.id, date: note.date, icon: note.icon, temperature: note.temperature, index: i },
+			{ key: note.id, date: note.date, icon: note.icon, temperature: note.temperature, index: i, allDayData: note.allDayWeather },
 			note.day
 		);
 	},
@@ -15734,7 +15727,7 @@ var Note = React.createClass({
 			"div",
 			{ className: "oneDayWeather" },
 			React.createElement(MainSubNote, { title: this.props.children, date: this.props.date, icon: this.props.icon, temperature: this.props.temperature }),
-			React.createElement(SubNote, null)
+			React.createElement(SubNote, { allDayData: this.props.allDayData })
 		);
 	}
 });
@@ -15781,28 +15774,42 @@ var SubNote = React.createClass({
 
 
 	render: function render() {
+		console.log("subnote data", this.props.allDayData);
+
+		var mylist = this.props.allDayData.map(function (item, i) {
+
+			return React.createElement(
+				"div",
+				{ className: "otherUnits", key: i },
+				React.createElement(
+					"div",
+					{ className: "unit" },
+					React.createElement(
+						"span",
+						null,
+						_moment2.default.unix(item.dt).format('ddd, hA'),
+						" "
+					),
+					React.createElement(
+						"span",
+						null,
+						" 18 \u2103"
+					),
+					React.createElement(
+						"span",
+						null,
+						" ",
+						React.createElement("img", { alt: "", src: "http://openweathermap.org/img/w/" + item.weather[0].icon + ".png" }),
+						" "
+					)
+				)
+			);
+		});
+
 		return React.createElement(
 			"div",
-			{ className: "otherUnits" },
-			React.createElement(
-				"div",
-				{ className: "unit" },
-				React.createElement(
-					"span",
-					null,
-					"21:00"
-				),
-				React.createElement(
-					"span",
-					null,
-					"18 \u2103"
-				),
-				React.createElement(
-					"span",
-					null,
-					React.createElement("img", { alt: "", src: "http://openweathermap.org/img/w/10d.png" })
-				)
-			)
+			null,
+			mylist
 		);
 	}
 });
