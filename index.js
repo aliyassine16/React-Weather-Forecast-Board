@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 116);
+/******/ 	return __webpack_require__(__webpack_require__.s = 117);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1899,7 +1899,7 @@ function loadLocale(name) {
             module && module.exports) {
         try {
             oldLocale = globalLocale._abbr;
-            __webpack_require__(117)("./" + name);
+            __webpack_require__(120)("./" + name);
             // because defineLocale currently also sets the global locale, we
             // want to undo that for lazy loaded locales
             getSetGlobalLocale(oldLocale);
@@ -4534,7 +4534,7 @@ return hooks;
 
 })));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(118)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(121)(module)))
 
 /***/ }),
 /* 1 */
@@ -15623,14 +15623,72 @@ return zhTw;
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _MainSubNote = __webpack_require__(118);
+
+var _MainSubNote2 = _interopRequireDefault(_MainSubNote);
+
+var _SubNote = __webpack_require__(119);
+
+var _SubNote2 = _interopRequireDefault(_SubNote);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Note = React.createClass({
+	displayName: 'Note',
+
+
+	randomBetween: function randomBetween(min, max) {
+		return min + Math.ceil(Math.random() * max);
+	},
+	componentWillMount: function componentWillMount() {
+		this.style = {
+			position: 'absolute',
+			right: this.randomBetween(0, window.innerWidth - 200) + 'px',
+			top: this.randomBetween(0, window.innerHeight - 200) + 'px',
+			transform: 'rotate(' + this.randomBetween(-15, 15) + 'deg)'
+
+		};
+	},
+
+	componentDidMount: function componentDidMount() {
+		//$(this.getDOMNode()).draggable();
+	},
+
+	render: function render() {
+		return React.createElement(
+			'div',
+			{ className: 'oneDayWeather' },
+			React.createElement(_MainSubNote2.default, { title: this.props.children, date: this.props.date, icon: this.props.icon, temperature: this.props.temperature }),
+			React.createElement(_SubNote2.default, { allDayData: this.props.allDayData })
+		);
+	}
+});
+
+exports.default = Note;
+
+/***/ }),
+/* 117 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var _moment = __webpack_require__(0);
 
 var _moment2 = _interopRequireDefault(_moment);
 
+var _Note = __webpack_require__(116);
+
+var _Note2 = _interopRequireDefault(_Note);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Board = React.createClass({
-	displayName: "Board",
+	displayName: 'Board',
 
 
 	getInitialState: function getInitialState() {
@@ -15653,12 +15711,19 @@ var Board = React.createClass({
 	componentWillMount: function componentWillMount() {
 		var self = this;
 		if (this.props.city) {
-			var url = "http://api.openweathermap.org/data/2.5/forecast?q=" + this.props.city + "&appid=fd21f7a3e4f3101954bee3ee68df7c8e";
+			var url = "http://api.openweathermap.org/data/2.5/forecast?&type=accurate&units=metric&q=" + this.props.city + "&appid=fd21f7a3e4f3101954bee3ee68df7c8e";
 
 			$.getJSON(url, function (data) {
 				var map = self.getMeTheMap(data);
+				var counter = 0;
 				map.forEach(function (value, key, map) {
-					self.add(value[0], value);
+					if (counter == 0) {
+						self.add(value[0], value);
+					} else {
+						console.log("index=", Math.floor(value.length / 2));
+						self.add(value[Math.floor(value.length / 2)], value);
+					}
+					counter++;
 				});
 			});
 		}
@@ -15686,50 +15751,34 @@ var Board = React.createClass({
 
 	eachNote: function eachNote(note, i) {
 		return React.createElement(
-			Note,
-			{ key: note.id, date: note.date, icon: note.icon, temperature: note.temperature, index: i, allDayData: note.allDayWeather },
-			note.day
+			_Note2.default,
+			{ key: note.id, date: note.note, icon: note.icon, temperature: note.temperature, index: i, allDayData: note.allDayWeather },
+			note.day,
+			React.createElement('br', null),
+			note.date
 		);
 	},
 
 	render: function render() {
 		return React.createElement(
-			"div",
-			{ className: "board" },
+			'div',
+			{ className: 'board' },
 			this.state.notes.map(this.eachNote)
 		);
 	}
 });
 
-var Note = React.createClass({
-	displayName: "Note",
+React.render(React.createElement(Board, { city: 'London,uk' }), document.body);
+
+/***/ }),
+/* 118 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
 
 
-	randomBetween: function randomBetween(min, max) {
-		return min + Math.ceil(Math.random() * max);
-	},
-	componentWillMount: function componentWillMount() {
-		this.style = {
-			position: 'absolute',
-			right: this.randomBetween(0, window.innerWidth - 200) + 'px',
-			top: this.randomBetween(0, window.innerHeight - 200) + 'px',
-			transform: 'rotate(' + this.randomBetween(-15, 15) + 'deg)'
-
-		};
-	},
-
-	componentDidMount: function componentDidMount() {
-		$(this.getDOMNode()).draggable();
-	},
-
-	render: function render() {
-		return React.createElement(
-			"div",
-			{ className: "oneDayWeather" },
-			React.createElement(MainSubNote, { title: this.props.children, date: this.props.date, icon: this.props.icon, temperature: this.props.temperature }),
-			React.createElement(SubNote, { allDayData: this.props.allDayData })
-		);
-	}
+Object.defineProperty(exports, "__esModule", {
+	value: true
 });
 
 var MainSubNote = React.createClass({
@@ -15753,6 +15802,11 @@ var MainSubNote = React.createClass({
 			React.createElement(
 				"div",
 				null,
+				this.props.description
+			),
+			React.createElement(
+				"div",
+				null,
 				React.createElement(
 					"span",
 					null,
@@ -15768,6 +15822,25 @@ var MainSubNote = React.createClass({
 		);
 	}
 });
+
+exports.default = MainSubNote;
+
+/***/ }),
+/* 119 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _moment = __webpack_require__(0);
+
+var _moment2 = _interopRequireDefault(_moment);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var SubNote = React.createClass({
 	displayName: "SubNote",
@@ -15787,13 +15860,15 @@ var SubNote = React.createClass({
 					React.createElement(
 						"span",
 						null,
-						_moment2.default.unix(item.dt).format('ddd, hA'),
-						" "
+						_moment2.default.unix(item.dt).format('LT'),
+						" |"
 					),
 					React.createElement(
 						"span",
 						null,
-						" 18 \u2103"
+						" ",
+						item.main.temp,
+						" \u2103"
 					),
 					React.createElement(
 						"span",
@@ -15814,10 +15889,10 @@ var SubNote = React.createClass({
 	}
 });
 
-React.render(React.createElement(Board, { city: "London,uk" }), document.body);
+exports.default = SubNote;
 
 /***/ }),
-/* 117 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
@@ -16066,10 +16141,10 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 117;
+webpackContext.id = 120;
 
 /***/ }),
-/* 118 */
+/* 121 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {

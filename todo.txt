@@ -1,0 +1,4 @@
+1-add a loader to the page
+2-add the search box "city"
+3-code optimization
+

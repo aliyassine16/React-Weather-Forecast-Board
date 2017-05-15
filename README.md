@@ -11,5 +11,6 @@
 
 ### Running the Application
 
-1. Navigate the command line and run "npm start"
-2. go the browser and type http://localhost:3003
+1. Navigate the command line and run "npm run build"
+2. Navigate the command line and run "npm start"
+3. go the browser and type http://localhost:3003
