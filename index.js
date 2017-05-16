@@ -15671,6 +15671,8 @@ exports.default = DayWeather;
 "use strict";
 
 
+var _React$createClass;
+
 var _moment = __webpack_require__(0);
 
 var _moment2 = _interopRequireDefault(_moment);
@@ -15681,7 +15683,9 @@ var _DayWeather2 = _interopRequireDefault(_DayWeather);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Board = React.createClass({
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var Board = React.createClass((_React$createClass = {
 	displayName: 'Board',
 
 
@@ -15724,55 +15728,53 @@ var Board = React.createClass({
 	},
 
 	componentWillMount: function componentWillMount() {
-		var self = this;
-		if (this.props.city) {
+		alert("done!");
+	}
 
-			var url = "http://api.openweathermap.org/data/2.5/forecast?&type=accurate&units=metric&q=" + this.props.city + "&appid=fd21f7a3e4f3101954bee3ee68df7c8e";
-			$.ajax({
-				url: url,
-				success: self.processWeatherData,
-				timeout: 5000, //5 second timeout, 
-				error: function error(jqXHR, status, errorThrown) {
-					//the status returned will be "timeout" 			     
-					console.log(errorThrown);
-					alert("Connection Error: !");
-				}
-			});
-		}
-	},
+}, _defineProperty(_React$createClass, 'componentWillMount', function componentWillMount() {
+	var self = this;
+	if (this.props.city) {
 
-	generateWeatherUnit: function generateWeatherUnit(wUnit, allDayWeather) {
-		console.log(allDayWeather);
-		var weather = wUnit.weather[0];
-		return {
-			id: wUnit.dt,
-			date: _moment2.default.unix(wUnit.dt).format("MMM Do YY"),
-			day: _moment2.default.unix(wUnit.dt).format("dddd"),
-			main: weather.main,
-			note: weather.description,
-			icon: "http://openweathermap.org/img/w/" + weather.icon + ".png",
-			temperature: wUnit.main.temp,
-			allDayWeather: allDayWeather
+		var url = "http://api.openweathermap.org/data/2.5/forecast?&type=accurate&units=metric&q=" + this.props.city + "&appid=fd21f7a3e4f3101954bee3ee68df7c8e";
+		$.ajax({
+			url: url,
+			success: self.processWeatherData,
+			timeout: 5000, //5 second timeout, 
+			error: function error(jqXHR, status, errorThrown) {
+				//the status returned will be "timeout" 			     
+				console.log(errorThrown);
+				alert("Connection Error: !");
+				self.setState({ notes: this.dayForecastContainer });
+			}
+		});
+	}
+}), _defineProperty(_React$createClass, 'generateWeatherUnit', function generateWeatherUnit(wUnit, allDayWeather) {
+	console.log(allDayWeather);
+	var weather = wUnit.weather[0];
+	return {
+		id: wUnit.dt,
+		date: _moment2.default.unix(wUnit.dt).format("MMM Do YY"),
+		day: _moment2.default.unix(wUnit.dt).format("dddd"),
+		main: weather.main,
+		note: weather.description,
+		icon: "http://openweathermap.org/img/w/" + weather.icon + ".png",
+		temperature: wUnit.main.temp,
+		allDayWeather: allDayWeather
 
-		};
-	},
-	updateUI: function updateUI() {
+	};
+}), _defineProperty(_React$createClass, 'updateUI', function updateUI() {
 
-		this.setState({ notes: this.dayForecastContainer });
-	},
+	this.setState({ notes: this.dayForecastContainer });
+}), _defineProperty(_React$createClass, 'addDayForecast', function addDayForecast(wUnit, allDayWeather) {
+	this.dayForecastContainer.push(this.generateWeatherUnit(wUnit, allDayWeather));
+}), _defineProperty(_React$createClass, 'eachNote', function eachNote(note, i) {
+	return React.createElement(_DayWeather2.default, { key: note.id,
+		dayForecast: note,
+		index: i,
+		allDayData: note.allDayWeather });
+}), _defineProperty(_React$createClass, 'render', function render() {
+	if (this.dayForecastContainer.length > 0) {
 
-	addDayForecast: function addDayForecast(wUnit, allDayWeather) {
-		this.dayForecastContainer.push(this.generateWeatherUnit(wUnit, allDayWeather));
-	},
-
-	eachNote: function eachNote(note, i) {
-		return React.createElement(_DayWeather2.default, { key: note.id,
-			dayForecast: note,
-			index: i,
-			allDayData: note.allDayWeather });
-	},
-
-	render: function render() {
 		return React.createElement(
 			'div',
 			{ className: 'board' },
@@ -15785,8 +15787,14 @@ var Board = React.createClass({
 			),
 			this.state.notes.map(this.eachNote)
 		);
+	} else {
+		return React.createElement(
+			'div',
+			null,
+			'Error!'
+		);
 	}
-});
+}), _React$createClass));
 
 React.render(React.createElement(Board, { title: 'Weather Forecast in the city of ', city: 'London,uk' }), document.body);
 

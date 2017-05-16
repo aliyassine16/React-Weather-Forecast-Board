@@ -46,6 +46,11 @@ var Board=React.createClass({
 
 
 	},
+
+	componentWillMount:function(){
+		alert("done!");
+
+	},
 	
 	componentWillMount:function(){
 		var self=this;		
@@ -59,6 +64,7 @@ var Board=React.createClass({
 			  	error: function(jqXHR, status, errorThrown){   //the status returned will be "timeout" 			     
 			  	console.log(errorThrown);
 			  	alert("Connection Error: !");
+			  	self.setState({notes:this.dayForecastContainer});
 			  } 
 			}); 
 		}
@@ -103,14 +109,21 @@ var Board=React.createClass({
 	},
 
 	render:function(){
-		return(
-			
-			<div className="board">
-			<h1>{this.props.title} {this.props.city}</h1>
-			{this.state.notes.map(this.eachNote)}			
-			</div>
+		if(this.dayForecastContainer.length>0){
 
-			);
+			return(
+				
+				<div className="board">
+				<h1>{this.props.title} {this.props.city}</h1>
+				{
+					this.state.notes.map(this.eachNote)
+				}			
+				</div>
+
+				);
+		}else{
+			return <div>Error!</div>
+		}
 	}
 });
 
