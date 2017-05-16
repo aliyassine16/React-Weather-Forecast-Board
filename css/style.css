@@ -11,6 +11,10 @@ body {
 	display: block;
 }
 
+.board h1{
+	text-align: center;
+}
+
 
 
 .oneDayWeather {

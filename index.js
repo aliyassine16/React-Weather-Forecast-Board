@@ -15637,38 +15637,32 @@ var _SubNote2 = _interopRequireDefault(_SubNote);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Note = React.createClass({
-	displayName: 'Note',
+var DayWeather = React.createClass({
+	displayName: 'DayWeather',
 
 
-	randomBetween: function randomBetween(min, max) {
-		return min + Math.ceil(Math.random() * max);
-	},
-	componentWillMount: function componentWillMount() {
-		this.style = {
-			position: 'absolute',
-			right: this.randomBetween(0, window.innerWidth - 200) + 'px',
-			top: this.randomBetween(0, window.innerHeight - 200) + 'px',
-			transform: 'rotate(' + this.randomBetween(-15, 15) + 'deg)'
-
-		};
-	},
+	componentWillMount: function componentWillMount() {},
 
 	componentDidMount: function componentDidMount() {
-		//$(this.getDOMNode()).draggable();
+		$(this.getDOMNode()).draggable();
 	},
 
 	render: function render() {
 		return React.createElement(
 			'div',
 			{ className: 'oneDayWeather' },
-			React.createElement(_MainSubNote2.default, { title: this.props.children, date: this.props.date, icon: this.props.icon, temperature: this.props.temperature }),
+			React.createElement(_MainSubNote2.default, { title: this.props.dayForecast.day,
+				date: this.props.dayForecast.date,
+				icon: this.props.dayForecast.icon,
+				description: this.props.dayForecast.note,
+				temperature: this.props.dayForecast.temperature
+			}),
 			React.createElement(_SubNote2.default, { allDayData: this.props.allDayData })
 		);
 	}
 });
 
-exports.default = Note;
+exports.default = DayWeather;
 
 /***/ }),
 /* 117 */
@@ -15681,9 +15675,9 @@ var _moment = __webpack_require__(0);
 
 var _moment2 = _interopRequireDefault(_moment);
 
-var _Note = __webpack_require__(116);
+var _DayWeather = __webpack_require__(116);
 
-var _Note2 = _interopRequireDefault(_Note);
+var _DayWeather2 = _interopRequireDefault(_DayWeather);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -15750,25 +15744,29 @@ var Board = React.createClass({
 	},
 
 	eachNote: function eachNote(note, i) {
-		return React.createElement(
-			_Note2.default,
-			{ key: note.id, date: note.note, icon: note.icon, temperature: note.temperature, index: i, allDayData: note.allDayWeather },
-			note.day,
-			React.createElement('br', null),
-			note.date
-		);
+		return React.createElement(_DayWeather2.default, { key: note.id,
+			dayForecast: note,
+			index: i,
+			allDayData: note.allDayWeather });
 	},
 
 	render: function render() {
 		return React.createElement(
 			'div',
 			{ className: 'board' },
+			React.createElement(
+				'h1',
+				null,
+				this.props.title,
+				' ',
+				this.props.city
+			),
 			this.state.notes.map(this.eachNote)
 		);
 	}
 });
 
-React.render(React.createElement(Board, { city: 'London,uk' }), document.body);
+React.render(React.createElement(Board, { title: 'Weather Forecast in the city of ', city: 'London,uk' }), document.body);
 
 /***/ }),
 /* 118 */
@@ -15882,7 +15880,7 @@ var SubNote = React.createClass({
 		});
 
 		return React.createElement(
-			"div",
+			"section",
 			null,
 			mylist
 		);

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "babel js -d built && webpack",
-    "start": "set NODE_ENV=development && open http://localhost:3003 & httpster -p 3003"
+    "start": "set NODE_ENV=development && babel js -d built && webpack && open http://localhost:3003 & httpster -p 3003"
   },
   "babel": {
     "presets": [

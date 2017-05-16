@@ -17,12 +17,8 @@ var SubNote =React.createClass({
 
 		});
 
-
-
-
 		return (
-			<div>{mylist}</div>
-
+			<section>{mylist}</section>
 			);
 
 	}

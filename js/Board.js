@@ -1,5 +1,5 @@
 import moment from 'moment';
-import Note from './Note';
+import DayWeather from './DayWeather';
 
 
 
@@ -74,15 +74,20 @@ var Board=React.createClass({
 
 	eachNote:function(note,i){
 		return(
-			<Note key={note.id} date={note.note}  icon={note.icon} temperature={note.temperature} index={i} allDayData={note.allDayWeather}>{note.day}<br />{note.date}</Note>
+			<DayWeather key={note.id} 
+						dayForecast={note}  
+						index={i} 
+						allDayData={note.allDayWeather}>
+			</DayWeather>
 			);
 	},
 
 	render:function(){
 		return(
-
+			
 			<div className="board">
-			{this.state.notes.map(this.eachNote)}			
+				<h1>{this.props.title} {this.props.city}</h1>
+				{this.state.notes.map(this.eachNote)}			
 			</div>
 
 			);
@@ -90,4 +95,4 @@ var Board=React.createClass({
 });
 
 
-React.render(<Board  city="London,uk" />,document.body);
+React.render(<Board title="Weather Forecast in the city of "  city="London,uk" />,document.body);
