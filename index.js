@@ -15796,7 +15796,7 @@ var Board = React.createClass((_React$createClass = {
 	}
 }), _React$createClass));
 
-React.render(React.createElement(Board, { title: 'Weather Forecast in the city of ', city: 'London,uk' }), document.body);
+React.render(React.createElement(Board, { title: 'Weather Forecast for the city of ', city: 'London,uk' }), document.body);
 
 /***/ }),
 /* 118 */

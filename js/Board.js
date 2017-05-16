@@ -112,7 +112,7 @@ var Board=React.createClass({
 		if(this.dayForecastContainer.length>0){
 
 			return(
-				
+
 				<div className="board">
 				<h1>{this.props.title} {this.props.city}</h1>
 				{
@@ -128,4 +128,4 @@ var Board=React.createClass({
 });
 
 
-React.render(<Board title="Weather Forecast in the city of "  city="London,uk" />,document.body);
+React.render(<Board title="Weather Forecast for the city of "  city="London,uk" />,document.body);
