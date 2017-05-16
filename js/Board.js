@@ -5,8 +5,10 @@ import DayWeather from './DayWeather';
 
 var Board=React.createClass({
 
+	dayForecastContainer:[],
 
 	getInitialState:function(){
+		
 		return {
 			notes:[]			
 		};
@@ -27,7 +29,7 @@ var Board=React.createClass({
 
 	},
 	componentWillMount:function(){
-		var self=this;
+		var self=this;		
 		if(this.props.city){
 			var url="http://api.openweathermap.org/data/2.5/forecast?&type=accurate&units=metric&q="+this.props.city+"&appid=fd21f7a3e4f3101954bee3ee68df7c8e"
 
@@ -38,13 +40,14 @@ var Board=React.createClass({
 				var counter=0;
 				map.forEach((value, key, map)=> {
 					if(counter==0){
-						self.add(value[0],value);
+						self.addDayForecast(value[0],value);
 					}else{
 						console.log("index=",Math.floor(value.length/2));
-						self.add(value[Math.floor(value.length/2)],value);
+						self.addDayForecast(value[Math.floor(value.length/2)],value);
 					}
 					counter++;
 				});
+				self.add();
 			});
 		}
 
@@ -65,19 +68,22 @@ var Board=React.createClass({
 		}
 
 	},
-	add:function(wUnit,allDayWeather){
-		var arr=this.state.notes;		
-		arr.push(this.generateWeatherUnit(wUnit,allDayWeather));
-		this.setState({notes:arr});
+	add:function(){
+		
+		this.setState({notes:this.dayForecastContainer});
+	},
+
+	addDayForecast:function(wUnit,allDayWeather){				
+		this.dayForecastContainer.push(this.generateWeatherUnit(wUnit,allDayWeather));
 	},
 
 
 	eachNote:function(note,i){
 		return(
 			<DayWeather key={note.id} 
-						dayForecast={note}  
-						index={i} 
-						allDayData={note.allDayWeather}>
+			dayForecast={note}  
+			index={i} 
+			allDayData={note.allDayWeather}>
 			</DayWeather>
 			);
 	},
@@ -86,8 +92,8 @@ var Board=React.createClass({
 		return(
 			
 			<div className="board">
-				<h1>{this.props.title} {this.props.city}</h1>
-				{this.state.notes.map(this.eachNote)}			
+			<h1>{this.props.title} {this.props.city}</h1>
+			{this.state.notes.map(this.eachNote)}			
 			</div>
 
 			);

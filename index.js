@@ -15685,7 +15685,10 @@ var Board = React.createClass({
 	displayName: 'Board',
 
 
+	dayForecastContainer: [],
+
 	getInitialState: function getInitialState() {
+
 		return {
 			notes: []
 		};
@@ -15712,13 +15715,14 @@ var Board = React.createClass({
 				var counter = 0;
 				map.forEach(function (value, key, map) {
 					if (counter == 0) {
-						self.add(value[0], value);
+						self.addDayForecast(value[0], value);
 					} else {
 						console.log("index=", Math.floor(value.length / 2));
-						self.add(value[Math.floor(value.length / 2)], value);
+						self.addDayForecast(value[Math.floor(value.length / 2)], value);
 					}
 					counter++;
 				});
+				self.add();
 			});
 		}
 	},
@@ -15737,10 +15741,13 @@ var Board = React.createClass({
 
 		};
 	},
-	add: function add(wUnit, allDayWeather) {
-		var arr = this.state.notes;
-		arr.push(this.generateWeatherUnit(wUnit, allDayWeather));
-		this.setState({ notes: arr });
+	add: function add() {
+
+		this.setState({ notes: this.dayForecastContainer });
+	},
+
+	addDayForecast: function addDayForecast(wUnit, allDayWeather) {
+		this.dayForecastContainer.push(this.generateWeatherUnit(wUnit, allDayWeather));
 	},
 
 	eachNote: function eachNote(note, i) {
