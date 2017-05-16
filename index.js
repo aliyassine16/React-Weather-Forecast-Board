@@ -15693,7 +15693,7 @@ var Board = React.createClass({
 			notes: []
 		};
 	},
-	getMeTheMap: function getMeTheMap(data) {
+	getTheMap: function getTheMap(data) {
 		var map = new Map();
 		data.list.forEach(function (item) {
 			var key = _moment2.default.unix(item.dt).format("dddd");
@@ -15705,27 +15705,42 @@ var Board = React.createClass({
 		});
 		return map;
 	},
+
+	processWeatherData: function processWeatherData(data) {
+		var _this = this;
+
+		var map = this.getTheMap(data);
+		var counter = 0;
+		map.forEach(function (value, key, map) {
+			if (counter == 0) {
+				_this.addDayForecast(value[0], value);
+			} else {
+				console.log("index=", Math.floor(value.length / 2));
+				_this.addDayForecast(value[Math.floor(value.length / 2)], value);
+			}
+			counter++;
+		});
+		this.updateUI();
+	},
+
 	componentWillMount: function componentWillMount() {
 		var self = this;
 		if (this.props.city) {
-			var url = "http://api.openweathermap.org/data/2.5/forecast?&type=accurate&units=metric&q=" + this.props.city + "&appid=fd21f7a3e4f3101954bee3ee68df7c8e";
 
-			$.getJSON(url, function (data) {
-				var map = self.getMeTheMap(data);
-				var counter = 0;
-				map.forEach(function (value, key, map) {
-					if (counter == 0) {
-						self.addDayForecast(value[0], value);
-					} else {
-						console.log("index=", Math.floor(value.length / 2));
-						self.addDayForecast(value[Math.floor(value.length / 2)], value);
-					}
-					counter++;
-				});
-				self.add();
+			var url = "http://api.openweathermap.org/data/2.5/forecast?&type=accurate&units=metric&q=" + this.props.city + "&appid=fd21f7a3e4f3101954bee3ee68df7c8e";
+			$.ajax({
+				url: url,
+				success: self.processWeatherData,
+				timeout: 5000, //5 second timeout, 
+				error: function error(jqXHR, status, errorThrown) {
+					//the status returned will be "timeout" 			     
+					console.log(errorThrown);
+					alert("Connection Error: !");
+				}
 			});
 		}
 	},
+
 	generateWeatherUnit: function generateWeatherUnit(wUnit, allDayWeather) {
 		console.log(allDayWeather);
 		var weather = wUnit.weather[0];
@@ -15741,7 +15756,7 @@ var Board = React.createClass({
 
 		};
 	},
-	add: function add() {
+	updateUI: function updateUI() {
 
 		this.setState({ notes: this.dayForecastContainer });
 	},

@@ -14,7 +14,7 @@ var Board=React.createClass({
 		};
 
 	},
-	getMeTheMap:function(data){
+	getTheMap:function(data){
 		const map = new Map();
 		data.list.forEach((item) => {
 			const key = moment.unix(item.dt).format("dddd");
@@ -28,30 +28,44 @@ var Board=React.createClass({
 		return map;
 
 	},
+
+	processWeatherData:function(data){
+
+		var map=this.getTheMap(data);				
+		var counter=0;
+		map.forEach((value, key, map)=> {
+			if(counter==0){
+				this.addDayForecast(value[0],value);
+			}else{
+				console.log("index=",Math.floor(value.length/2));
+				this.addDayForecast(value[Math.floor(value.length/2)],value);
+			}
+			counter++;
+		});
+		this.updateUI();
+
+
+	},
+	
 	componentWillMount:function(){
 		var self=this;		
 		if(this.props.city){
+
 			var url="http://api.openweathermap.org/data/2.5/forecast?&type=accurate&units=metric&q="+this.props.city+"&appid=fd21f7a3e4f3101954bee3ee68df7c8e"
-
-
-
-			$.getJSON(url,function(data){
-				var map=self.getMeTheMap(data);				
-				var counter=0;
-				map.forEach((value, key, map)=> {
-					if(counter==0){
-						self.addDayForecast(value[0],value);
-					}else{
-						console.log("index=",Math.floor(value.length/2));
-						self.addDayForecast(value[Math.floor(value.length/2)],value);
-					}
-					counter++;
-				});
-				self.add();
-			});
+			$.ajax({ 
+				url: url,  
+				success: self.processWeatherData, 
+			  	timeout: 5000, //5 second timeout, 
+			  	error: function(jqXHR, status, errorThrown){   //the status returned will be "timeout" 			     
+			  	console.log(errorThrown);
+			  	alert("Connection Error: !");
+			  } 
+			}); 
 		}
 
 	},
+
+
 	generateWeatherUnit:function(wUnit,allDayWeather){
 		console.log(allDayWeather);
 		var weather=wUnit.weather[0];
@@ -68,7 +82,7 @@ var Board=React.createClass({
 		}
 
 	},
-	add:function(){
+	updateUI:function(){
 		
 		this.setState({notes:this.dayForecastContainer});
 	},
