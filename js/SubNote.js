@@ -1,5 +1,8 @@
 import moment from 'moment';
 
+import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom';
+
 var SubNote =React.createClass({
 
 	render:function(){

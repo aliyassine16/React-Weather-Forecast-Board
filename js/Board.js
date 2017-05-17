@@ -1,7 +1,8 @@
 import moment from 'moment';
 import DayWeather from './DayWeather';
 
-
+import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom';
 
 var Board=React.createClass({
 
@@ -63,7 +64,9 @@ var Board=React.createClass({
 			  	timeout: 5000, //5 second timeout, 
 			  	error: function(jqXHR, status, errorThrown){   //the status returned will be "timeout" 			     
 			  	console.log(errorThrown);
-			  	alert("Connection Error: !");
+			  	//alert("Connection Error: !");
+			  	alert("Error: " + jqXHR.statusText);
+			  	//alert(errorThrown);
 			  	self.setState({notes:this.dayForecastContainer});
 			  } 
 			}); 
@@ -128,4 +131,4 @@ var Board=React.createClass({
 });
 
 
-React.render(<Board title="Weather Forecast for the city of "  city="London,uk" />,document.body);
+ReactDOM.render(<Board title="Weather Forecast for the city of "  city="Paris,France" />,document.getElementById('container'));

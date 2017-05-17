@@ -23,6 +23,10 @@
 2. add the search box "city"
 3. code optimization
 4. Unit testing
+5. use sass instead of css
+6. use webpack to create css bundles.
+7. use es6-request instead of jquery
+
 
 
 

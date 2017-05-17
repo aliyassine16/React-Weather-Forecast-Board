@@ -1,6 +1,9 @@
 import MainSubNote from './MainSubNote';
 import SubNote from './SubNote';
 
+import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom';
+
 var DayWeather =React.createClass({
 
 
@@ -9,7 +12,8 @@ var DayWeather =React.createClass({
 	},
 
 	componentDidMount:function(){
-		$(this.getDOMNode()).draggable();
+		// $(this.getDOMNode()).draggable();
+		$(ReactDOM.findDOMNode(this)).draggable();
 	},
 
 
@@ -18,11 +22,11 @@ var DayWeather =React.createClass({
 			
 			<div className="oneDayWeather" >
 			<MainSubNote title={this.props.dayForecast.day}
-						 date={this.props.dayForecast.date}
-						 icon={this.props.dayForecast.icon}
-						 description={this.props.dayForecast.note}
-						 temperature={this.props.dayForecast.temperature}
-			 />
+			date={this.props.dayForecast.date}
+			icon={this.props.dayForecast.icon}
+			description={this.props.dayForecast.note}
+			temperature={this.props.dayForecast.temperature}
+			/>
 			<SubNote allDayData={this.props.allDayData}  />
 
 			</div>

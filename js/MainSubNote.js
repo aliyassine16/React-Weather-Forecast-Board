@@ -1,4 +1,7 @@
 
+import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom';
+
 var MainSubNote =React.createClass({
 	
 	render:function(){
