@@ -125,7 +125,7 @@ var Board=React.createClass({
 
 				);
 		}else{
-			return <div>Error!</div>
+			return <div></div>
 		}
 	}
 });
